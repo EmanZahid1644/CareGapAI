@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, jsonify, send_file
 import json
 import pandas as pd
 import pickle
+import os
 
 app = Flask(__name__)
 
@@ -95,6 +96,9 @@ def predict_new_user():
         "CareGap": care_gap
     })
 
+
+
 if __name__ == "__main__":
-    print("Starting CareGap AI Flask server on http://127.0.0.1:5000 ...")
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
