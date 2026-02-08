@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CareGap-AI: Patient Risk & Care Gap Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <h1>CareGap-AI: Patient Risk & Care Gap Analytics</h1>
+        <div class="header-desc">
+            <em>CareGap AI uses machine learning to analyze patient lab trends, follow-up behavior, and clinical patterns to predict health risk and detect potential care gaps early.</em><br>
+            <em>It helps clinicians identify patients at risk and intervene before disease progression or missed care leads to worsened outcomes.</em><br>
+            <em>Both real and simulated patient journeys are visualized for actionable insights.</em>
+        </div>
+    </header>
+    <div class="main-tiles">
+        <div class="tile tile-existing" id="tileExisting">
+            <h2>👤 Existing Patient</h2>
+            <select id="patientSelect">
+                {% for pid in patient_ids %}
+                    <option value="{{ pid }}">Patient {{ pid }}</option>
+                {% endfor %}
+            </select>
+            <button id="existingSubmit">Show Analytics</button>
+        </div>
+        <div class="tile tile-new" id="tileNew">
+            <h2>🩺 New Patient (What-If Analysis)</h2>
+            <button id="newPatientBtn">Simulate New Patient</button>
+        </div>
+    </div>
+    <!-- Modal for New Patient Simulation -->
+    <div class="modal" id="newPatientModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>🩺 Simulate New Patient</h2>
+            <div class="input-group"><label>👤 Age:</label><input id="ageInput" type="number"></div>
+            <div class="input-group"><label>🚹 / 🚺 Gender:</label>
+                <select id="genderInput">
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+            <div class="input-group"><label>❤️ Chronic Condition:</label>
+                <select id="chronicInput">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+            <div class="input-group"><label>🩸 HbA1c:</label><input id="hbA1cInput" type="number" step="0.1"></div>
+            <div class="input-group"><label>🧪 Cholesterol:</label><input id="cholesterolInput" type="number"></div>
+            <div class="input-group"><label>✅ / ❌ Follow-up Done:</label>
+                <select id="followupInput">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+            <button id="predictBtn">Predict</button>
+        </div>
+    </div>
+    <!-- Analytics Section -->
+    <div class="analytics-section">
+        <!-- Risk Summary Tiles -->
+        <div class="risk-summary-row">
+            <div class="summary-card" id="summaryRiskScore">
+                <div class="summary-value" id="summaryRiskScoreValue">-</div>
+                <div class="summary-label">Risk Score</div>
+            </div>
+            <div class="summary-card" id="summaryRiskLevel">
+                <div class="summary-value" id="summaryRiskLevelValue">-</div>
+                <div class="summary-label">Risk Level</div>
+            </div>
+            <div class="summary-card" id="summaryCareGap">
+                <div class="summary-value" id="summaryCareGapValue">-</div>
+                <div class="summary-label">Care Gap</div>
+            </div>
+        </div>
+        <!-- Charts Section -->
+        <div class="charts-row">
+            <div class="card chart-card">
+                <h2>📈 Patient Risk Trend Over Time</h2>
+                <div class="subtitle">Higher values indicate increased risk</div>
+                <canvas id="riskTimeline" width="600" height="200"></canvas>
+            </div>
+            <div class="card feature-card">
+                <h2>📊 Feature Importance</h2>
+                <div class="subtitle">Shows which factors most influence risk prediction</div>
+                <canvas id="featureChart" width="400" height="200"></canvas>
+                <div class="feature-note">Follow-up status and HbA1c are the strongest predictors of patient risk.</div>
+            </div>
+        </div>
+        <!-- Patient Visit Table (last) -->
+        <div class="card table-card">
+            <h2>🧾 Patient Visit Table</h2>
+            <div id="timeline"></div>
+        </div>
+    </div>
+    <!-- Rotating Footer Quotes -->
+    <footer class="footer-quotes">
+        <span id="footerQuote">Prevention is better than cure.</span>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
